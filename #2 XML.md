@@ -75,7 +75,7 @@
 
 
 
-
+<br />
 
 ## XML DOM
 
@@ -87,5 +87,78 @@
 
 
 
+<br/>
+
 ## DTD
+
+DTD - 文档类型定义，可被成行的声明在 XML 文档中，也可以独立出来，作为一个外部引用
+
+### 当包含在 XML 文件中时
+
+声明语法如下：
+
+```xml
+<!DOCTYPE root-element [
+...
+element-declarations
+...
+]>
+```
+
+一个实例：
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE note [
+<!ELEMENT note (to, from, heading, body)>		<!-- 元素定义，以下的子元素必须按括号里的顺序声明 -->
+<!ELEMENT to (#PCDATA)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT heading (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+]>
+
+<note>
+<to>Tove</to>
+<from>Jani</from>
+<heading>Reminder</heading>
+<body>Don't forget me this weekend!</body>
+</note>
+```
+
+### 当在外部文件定义时
+
+语法：
+
+```xml
+<!DOCTYPE root-element SYSTEM "filename.dtd">
+```
+
+实例：
+
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE note SYSTEM "note.dtd">
+<note>
+<to>Tove</to>
+<from>Jani</from>
+<heading>Reminder</heading>
+<body>Don't forget me this weekend!</body>
+</note>
+```
+
+而 note.dtd 文件内容如下：
+
+```dtd
+<!ELEMENT note (to,from,heading,body)>
+<!ELEMENT to (#PCDATA)>
+<!ELEMENT from (#PCDATA)>
+<!ELEMENT heading (#PCDATA)>
+<!ELEMENT body (#PCDATA)>
+```
+
+
+
+
+
+
 
