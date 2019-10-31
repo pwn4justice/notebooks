@@ -84,7 +84,11 @@
 
 
 
+PASS
 
+PASS
+
+PASS
 
 
 
@@ -239,11 +243,78 @@ XML:
 ?? <payment />	?? --- Doubt on that...
 ```
 
+<br />
 
+**3.属性和子元素如何取舍？**
 
+大多数情况下，应该避免使用属性。一般属性具有以下问题：
 
+1. 属性不能包含多个值（子元素可以）
+2. 属性不容易扩展（为以后需求的变化）
+3. 属性无法描述结构（子元素可以）
+4. 属性更难以操纵程序代码
+5. 属性值是不容易测试，针对DTD
 
+例外情况：
 
+有时我指定的 ID 应用了元素。这些 ID 应用可在HTML中的很多相同的情况下可作为 NAME 或者 ID 属性来访问 XML 元素，如：
+
+```xml
+<messages>
+<note id="p501">
+  <to>Tove</to>
+  <from>Jani</from>
+  <heading>Reminder</heading>
+  <body>Don't forget me this weekend!</body>
+</note>
+
+<note id="p502">
+  <to>Jani</to>
+  <from>Tove</from>
+  <heading>Re: Reminder</heading>
+  <body>I will not!</body>
+</note>
+</messages>
+```
+
+<br />
+
+**4.声明实体**
+
+DTD 中的实体（不是 XML 中的实体哦），相当于一个**变量**，用于定义引用普通文本或特殊字符的快捷方式。
+
+**内部实体声明：**
+
+```dtd
+<!ENTITY 实体名称 "实体的值">
+```
+
+实例：
+
+```dtd
+DTD:
+<!ENTITY writer "J.K.Rolling">
+<!ENTITY bookname "Harry Potter">
+
+XML 实例：
+<book>&writer;&bookname;</book>
+```
+
+**外部实体声明：**
+
+```dtd
+<!ENTITY 实体名称 SYSTEM "URI/URL">
+```
+
+实例：
+
+```dtd
+<!ENTITY writer SYSTEM "http://www.logan.com/entities.dtd">
+<!ENTITY copyright SYSTEM "http://www.logan.com/entities.dtd">
+
+XML:
+<author>&writer;&copyright;</author>
+```
 
 
 
@@ -316,7 +387,105 @@ element-declarations
 
 
 
+<br/>
 
+## DTD 的几种不同实例
+
+1. 由 David Moisan 创造。拷贝自：` http://www.davidmoisan.org/`
+
+```dtd
+<!DOCTYPE TVSCHEDULE [
+
+<!ELEMENT TVSCHEDULE (CHANNEL+)>
+<!ELEMENT CHANNEL (BANNER,DAY+)>
+<!ELEMENT BANNER (#PCDATA)>
+<!ELEMENT DAY (DATE,(HOLIDAY|PROGRAMSLOT+)+)>
+<!ELEMENT HOLIDAY (#PCDATA)>
+<!ELEMENT DATE (#PCDATA)>
+<!ELEMENT PROGRAMSLOT (TIME,TITLE,DESCRIPTION?)>
+<!ELEMENT TIME (#PCDATA)>
+<!ELEMENT TITLE (#PCDATA)> 
+<!ELEMENT DESCRIPTION (#PCDATA)>
+
+<!ATTLIST TVSCHEDULE NAME CDATA #REQUIRED>
+<!ATTLIST CHANNEL CHAN CDATA #REQUIRED>
+<!ATTLIST PROGRAMSLOT VTR CDATA #IMPLIED>
+<!ATTLIST TITLE RATING CDATA #IMPLIED>
+<!ATTLIST TITLE LANGUAGE CDATA #IMPLIED>
+]>
+```
+
+
+
+2. 拷贝自：`http://www.vervet.com/`
+
+```dtd
+<!DOCTYPE NEWSPAPER [
+
+<!ELEMENT NEWSPAPER (ARTICLE+)>
+<!ELEMENT ARTICLE (HEADLINE,BYLINE,LEAD,BODY,NOTES)>
+<!ELEMENT HEADLINE (#PCDATA)>
+<!ELEMENT BYLINE (#PCDATA)>
+<!ELEMENT LEAD (#PCDATA)>
+<!ELEMENT BODY (#PCDATA)>
+<!ELEMENT NOTES (#PCDATA)>
+
+<!ATTLIST ARTICLE AUTHOR CDATA #REQUIRED>
+<!ATTLIST ARTICLE EDITOR CDATA #IMPLIED>
+<!ATTLIST ARTICLE DATE CDATA #IMPLIED>
+<!ATTLIST ARTICLE EDITION CDATA #IMPLIED>
+
+<!ENTITY NEWSPAPER "Vervet Logic Times">
+<!ENTITY PUBLISHER "Vervet Logic Press">
+<!ENTITY COPYRIGHT "Copyright 1998 Vervet Logic Press">
+
+]>
+```
+
+
+
+3. 拷贝自：` http://www.vervet.com/`
+
+```dtd
+<!DOCTYPE CATALOG [
+
+<!ENTITY AUTHOR "John Doe">
+<!ENTITY COMPANY "JD Power Tools, Inc.">
+<!ENTITY EMAIL "jd@jd-tools.com">
+
+<!ELEMENT CATALOG (PRODUCT+)>
+
+<!ELEMENT PRODUCT
+(SPECIFICATIONS+,OPTIONS?,PRICE+,NOTES?)>
+<!ATTLIST PRODUCT
+NAME CDATA #IMPLIED
+CATEGORY (HandTool|Table|Shop-Professional) "HandTool"
+PARTNUM CDATA #IMPLIED
+PLANT (Pittsburgh|Milwaukee|Chicago) "Chicago"
+INVENTORY (InStock|Backordered|Discontinued) "InStock">
+
+<!ELEMENT SPECIFICATIONS (#PCDATA)>
+<!ATTLIST SPECIFICATIONS
+WEIGHT CDATA #IMPLIED
+POWER CDATA #IMPLIED>
+
+<!ELEMENT OPTIONS (#PCDATA)>
+<!ATTLIST OPTIONS
+FINISH (Metal|Polished|Matte) "Matte"
+ADAPTER (Included|Optional|NotApplicable) "Included"
+CASE (HardShell|Soft|NotApplicable) "HardShell">
+
+<!ELEMENT PRICE (#PCDATA)>
+<!ATTLIST PRICE
+MSRP CDATA #IMPLIED
+WHOLESALE CDATA #IMPLIED
+STREET CDATA #IMPLIED
+SHIPPING CDATA #IMPLIED>
+
+<!ELEMENT NOTES (#PCDATA)>
+
+]>
+```
 
 
 
