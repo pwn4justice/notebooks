@@ -153,9 +153,95 @@ xml:			值是一个预定义的 XML 值
 
 **默认的属性值**：
 
+```dtd
+DTD:
+<!ELEMENT my_element EMPTY>
+<!ATTLIST my_element my_attr CDATA "0">
+
+合法的 XML：
+<my_element my_attr="100" />		如果没有设置，则默认值是 0
 ```
 
+**#REQUIRED**
+
+```dtd
+<!ATTLIST my_element my_attr attr_type #REQUIRED>
 ```
+
+实例：
+
+```dtd
+DTD:
+<!ELEMENT person EMPTY>
+<!ATTLIST person name CDATA #REQUIRED>
+
+合法的 XML：
+<person name="jack" />
+
+非法的 XML：
+<person />
+```
+
+**#IMPLIED**
+
+```dtd
+<!ATTLIST my_element my_attr attr_type #IMPLIED>
+```
+
+实例：
+
+```dtd
+DTD:
+<!ELEMENT contact EMPTY>
+<!ATTLIST contact fax CDATA #IMPLIED>
+
+合法的 XML：
+<contact fax="555-123455" />
+<contact />
+```
+
+**#FIXED**
+
+```dtd
+<!ATTLIST my_element my_attr attr_type #FIXED "value">
+```
+
+实例：
+
+```dtd
+DTD:
+<!ELEMENT sender EMPTY>
+<!ATTLIST sender company CDATA #FIXED "Apple.Inc">
+
+合法 XML：
+<sender company="Apple.Inc" />
+
+非法 XML：
+<sender company="Microsoft" />
+```
+
+**列举属性值**
+
+```dtd
+<!ATTLIST my_element my_attr attr_type (v1|v2|v3..) default-value>
+```
+
+实例：
+
+```dtd
+DTD:
+<!ELEMENT payment EMPTY>
+<!ATTLIST payment type (check|cash) "cash">			<!-- 默认采用现金支付 -->
+
+XML:
+<payment type="check" />    or
+<payment type="cash" />     or
+?? <payment />	?? --- Doubt on that...
+```
+
+
+
+
 
 
 
